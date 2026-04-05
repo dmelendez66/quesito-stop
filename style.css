@@ -1,22 +1,60 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     text-align: center;
-    background: lightblue;
-    transition: background 0.3s;
+    background: linear-gradient(to right, #74ebd5, #acb6e5);
+    margin: 0;
+    padding: 0;
 }
 
-#game {
-    margin-top: 100px;
+#menu, #game {
+    margin-top: 80px;
 }
 
 h1 {
-    font-size: 40px;
+    font-size: 48px;
+    color: #333;
 }
 
 h2 {
-    font-size: 28px;
+    font-size: 32px;
+    margin: 20px;
 }
 
 p {
-    font-size: 20px;
+    font-size: 22px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+#game {
+    padding: 20px;
+}
+
+#status {
+    font-weight: bold;
+}
+
+#steps {
+    font-size: 24px;
 }

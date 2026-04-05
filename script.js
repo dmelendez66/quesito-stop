@@ -1,9 +1,19 @@
+document.addEventListener("DOMContentLoaded", function() {
+
+const greenSound = new Audio("sounds/green.mp3");
+const redSound = new Audio("sounds/red.mp3");
+const loseSound = new Audio("sounds/lose.mp3");
+const winSound = new Audio("sounds/winner.mp3");
+
 let players = [];
 let scores = {};
 let currentPlayerIndex = 0;
 
 let steps = 0;
-let goal = 10;
+let goal = 30;
+
+let timeLeft = 15;
+let timerInterval = null;
 
 let isRed = false;
 let gameOver = false;
@@ -43,6 +53,9 @@ function startTurn() {
     document.body.style.background = "lightblue";
     document.getElementById("status").innerText = `${getCurrentPlayer()} prepárate...`;
     document.getElementById("steps").innerText = "Pasos: 0";
+    document.getElementById("timer").innerText = "Tiempo: 10";
+
+    startTimer();
 
     setTimeout(greenLight, 1500);
 }
@@ -50,11 +63,17 @@ function startTurn() {
 function greenLight() {
     if (gameOver) return;
 
+    document.body.style.transition = "0.3s";
+
     isRed = false;
     canPress = true;
 
+
     document.body.style.background = "lightgreen";
     document.getElementById("status").innerText = "🟢 GREEN LIGHT";
+
+    greenSound.currentTime = 0;
+    greenSound.play().catch(() => {});
 
     let tiempo = Math.random() * 2000 + 2000;
     setTimeout(redLight, tiempo);
@@ -68,6 +87,9 @@ function redLight() {
     document.body.style.background = "tomato";
     document.getElementById("status").innerText = "🔴 RED LIGHT";
 
+    redSound.currentTime = 0;
+    redSound.play().catch(() => {});
+
     setTimeout(() => {
         isRed = true;
         canPress = true;
@@ -75,7 +97,28 @@ function redLight() {
     }, 300);
 }
 
+function startTimer() {
+    clearInterval(timerInterval);
+
+    timeLeft = 15;
+    document.getElementById("timer").innerText = "Tiempo: " + timeLeft;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = "Tiempo: " + timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById("status").innerText = "⏱️ Tiempo agotado!";
+            gameOver = true;
+            endTurn();
+        }
+    }, 1000);
+}
+
 function endTurn() {
+    clearInterval(timerInterval);
+
     scores[getCurrentPlayer()] = steps;
     currentPlayerIndex++;
 
@@ -87,7 +130,9 @@ function endTurn() {
 }
 
 function showWinner() {
-    let winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+    let winner = Object.keys(scores).reduce((a, b) =>
+        scores[a] > scores[b] ? a : b
+    );
 
     let text = "Resultados:\n";
     for (let p in scores) {
@@ -100,6 +145,9 @@ function showWinner() {
 
     document.getElementById("status").innerText = text;
     document.body.style.background = "lightblue";
+
+    winSound.currentTime = 0;
+    winSound.play().catch(() => {});
 
     waitingChoice = true;
 }
@@ -126,18 +174,29 @@ document.addEventListener("keydown", function(e) {
 
     if (e.key === "ArrowUp") {
         if (isRed) {
+            loseSound.currentTime = 0;
+            loseSound.play().catch(() => {});
+
             document.getElementById("status").innerText = "💀 PERDISTE";
             gameOver = true;
+
+            clearInterval(timerInterval);
             endTurn();
         } else {
             steps++;
             document.getElementById("steps").innerText = `Pasos: ${steps}`;
 
             if (steps >= goal) {
-                document.getElementById("status").innerText = `🏆 ${getCurrentPlayer()} terminó!`;
+                document.getElementById("status").innerText =
+                    `🏆 ${getCurrentPlayer()} terminó!`;
                 gameOver = true;
                 endTurn();
             }
         }
     }
+});
+
+// 👇 importante para que el botón HTML funcione
+window.startGame = startGame;
+
 });
