@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Quesito Stop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- MENU INICIAL -->
+    <div id="menu">
+        <h1>Quesito Stop 🚦</h1>
+        <p>¿Cuántos jugadores?</p>
+        <input type="number" id="numPlayers" min="1" max="10" value="2">
+        <br><br>
+        <button onclick="startGame()">Empezar</button>
+    </div>
+
+    <!-- JUEGO -->
+    <div id="game" style="display:none;">
+        <h2 id="status">Prepárate...</h2>
+        <p id="steps">Pasos: 0</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
